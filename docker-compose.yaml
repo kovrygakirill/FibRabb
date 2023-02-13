@@ -1,0 +1,21 @@
+version: "3.10"
+
+services:
+  publisher:
+    build: .
+    # sleep 10 second for init RabbitMQ
+    command: bash -c "/bin/sleep 10 && python publisher.py"
+    depends_on:
+      - rabbitmq
+      - consumer
+
+  consumer:
+    build: .
+    # sleep 10 second for init RabbitMQ
+    command: bash -c "/bin/sleep 10 && python consumer.py"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
